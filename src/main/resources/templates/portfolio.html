@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Thymeleaf Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">SWAG OP</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+        <a class="navbar-brand" th:href="@{/user/{userId}(userId=${wallet.user.id})}">User</a>
+        <button   class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/portfolio/{userId}(userId=${wallet.user.id})}">Portfolio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" th:href="@{/logout}">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    Bitcoin Wallet Info
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+
+                        <dt class="col-sm-4">Address</dt>
+                        <dd class="col-sm-8" th:text="${wallet.address}"></dd>
+
+                        <dt class="col-sm-4">Balance</dt>
+                        <dd class="col-sm-8" th:text="${wallet.btcAmount}"></dd>
+
+                        <!-- <dt class="col-sm-4">Transactions</dt>
+                          <dd class="col-sm-8">${wallet.transactionCount}</dd>-->
+
+                        <!-- <dt class="col-sm-4">Transactions</dt>
+                         <dd class="col-sm-8">${wallet.transactionCount}</dd>
+
+                         <dt class="col-sm-4">Last Updated</dt>
+                         <dd class="col-sm-8">${wallet.lastUpdated}</dd>-->
+                    </dl>
+                </div>
+            </div>
+            <br>
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-6"><a th:href="@{/transaction/redirect/send/{address}(address=${wallet.address})}"
+                                          class="btn btn-outline-secondary btn-lg">Send</a></div>
+                    <div class="col-6"><a
+                            class="btn btn-outline-success btn-lg">Receive</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Currency</th>
+                    <th>Base</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${wallet.crypto.currency}">-</td>
+                    <td th:text="${wallet.crypto.base}">-</td>
+                    <td th:text="${wallet.crypto.amount}">-</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS (jQuery and Popper.js are required as dependencies) -->
+<script th:src="@{https://code.jquery.com/jquery-3.3.1.slim.min.js}"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNVQ8qr"
+        crossorigin="anonymous"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js}"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

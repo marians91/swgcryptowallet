@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Insert 12 Words</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">SWAG OP</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <a class="navbar-brand" th:href="@{/user/{userId}(userId=${wallet.user.id})}">User</a>
+    <button  class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/portfolio/{userId}(userId=${wallet.user.id})}">Portfolio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" th:href="@{/logout}">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Contact</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main content -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="text-center mb-5">
+        <h1>Insert 12 Words</h1>
+        <p th:text="${wallet.user.firstName}"></p>
+        <p class="lead">Please enter 12 words:</p>
+      </div>
+
+      <form th:if="${wallet.typeOfOperation} == 'create'" th:object="${wallet}" th:action="@{/wallet/create/{id}(id=${wallet.user.id})}" method="post">
+        <div class="form-group">
+          <input th:value="${wallet.mnemonicSeedPhrase}" th:field="*{mnemonicSeedPhrase}" type="text" class="form-control" name="words" placeholder="Enter 12 words separated by a space" required>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">Create Wallet</button>
+        </div>
+      </form>
+      <form th:if="${wallet.typeOfOperation} == 'import'" th:object="${wallet}" th:action="@{/wallet/import/{id}(id=${wallet.user.id})}" method="post">
+        <div class="form-group">
+          <input th:value="${wallet.mnemonicSeedPhrase}" th:field="*{mnemonicSeedPhrase}" type="text" class="form-control" name="words" placeholder="Enter 12 words separated by a space" required>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">Import Wallet</button>
+        </div>
+      </form>
+      <form th:if="${wallet.typeOfOperation} == 'send'" th:object="${wallet}" th:action="@{/wallet/send/{id}(id=${wallet.user.id})}" method="post">
+        <div class="form-group">
+          <input th:value="${wallet.mnemonicSeedPhrase}" th:field="*{mnemonicSeedPhrase}" type="text" class="form-control" name="words" placeholder="Enter 12 words separated by a space" required>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">Import Wallet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi4jlq"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
