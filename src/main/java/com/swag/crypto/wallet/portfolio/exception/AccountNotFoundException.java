@@ -11,7 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AccountNotFoundException extends RuntimeException{
 
+    private Long userId;
     private String account;
+    private String code;
 
 
 }

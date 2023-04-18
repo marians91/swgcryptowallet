@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.swag.crypto.wallet.core.constants.Constant.ErrorMessage.TRANSFER_FUNDS_PHASE;
 import static com.swag.crypto.wallet.core.constants.Constant.Path.TRANSACTION;
 import static com.swag.crypto.wallet.user.Utils.UserUtils.extractMnemonichPhrase;
 
@@ -97,7 +98,7 @@ public class TransactionController {
 
         Optional<Wallet> wallet = walletService.findByAddress(address);
         if (!wallet.isPresent()) {
-            throw new AccountNotFoundException(address);
+            throw new AccountNotFoundException(null,address,TRANSFER_FUNDS_PHASE);
         }
 
     }
@@ -110,7 +111,7 @@ public class TransactionController {
 
         boolean authorized = false;
         if (!wallet.isPresent()) {
-            throw new AccountNotFoundException();
+            throw new AccountNotFoundException(null,address,TRANSFER_FUNDS_PHASE);
         } else {
             authorized = checkKeyMatch(privateKey, wallet.get());
         }

@@ -1,5 +1,6 @@
 package com.swag.crypto.wallet.portfolio.service.impl;
 
+import com.swag.crypto.wallet.portfolio.exception.AccountNotFoundException;
 import com.swag.crypto.wallet.portfolio.model.dto.WalletDTO;
 import com.swag.crypto.wallet.portfolio.entity.Wallet;
 import com.swag.crypto.wallet.portfolio.repository.WalletRepository;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.swag.crypto.wallet.core.constants.Constant.ErrorMessage.IMPORT_PHASE;
 
 @Service
 public class WalletServiceImpl implements WalletService {
@@ -59,7 +62,7 @@ public class WalletServiceImpl implements WalletService {
         Optional<Wallet> wallet = findByAddress(address);
         boolean authorized = false;
         if (!wallet.isPresent()) {
-            return null;
+             throw new AccountNotFoundException(userDto.getId(), "",IMPORT_PHASE);
         } else {
             authorized = checkPermission(privateKey, wallet.get());
             if (authorized == true) {

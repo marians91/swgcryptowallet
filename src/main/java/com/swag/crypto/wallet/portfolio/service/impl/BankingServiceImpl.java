@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.swag.crypto.wallet.core.constants.Constant.ErrorMessage.TRANSFER_FUNDS_PHASE;
+
 @Service
 public class BankingServiceImpl implements BankingService {
     private final WalletRepository walletRepository;
@@ -50,10 +52,10 @@ public class BankingServiceImpl implements BankingService {
     @Override
     public void send(String sender, String receiver, Double amount, List<String> mnemonicSeedPhrase) {
         Optional<Wallet> senderWallet = walletRepository.findByAddress(sender);
-        if (!senderWallet.isPresent()) throw new AccountNotFoundException(sender);
+        if (!senderWallet.isPresent()) throw new AccountNotFoundException(null,sender,TRANSFER_FUNDS_PHASE);
 
         Optional<Wallet> receiverWallet = walletRepository.findByAddress(receiver);
-        if (!receiverWallet.isPresent()) throw new AccountNotFoundException(receiver);
+        if (!receiverWallet.isPresent()) throw new AccountNotFoundException(null,receiver,TRANSFER_FUNDS_PHASE);
 
         if (!authorize(sender, mnemonicSeedPhrase)) throw new NotAuthorizedException(sender);
 

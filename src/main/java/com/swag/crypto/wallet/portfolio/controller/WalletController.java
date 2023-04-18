@@ -1,6 +1,8 @@
 package com.swag.crypto.wallet.portfolio.controller;
 
 import com.swag.crypto.wallet.portfolio.connector.ExternalConnector;
+import com.swag.crypto.wallet.portfolio.entity.Wallet;
+import com.swag.crypto.wallet.portfolio.exception.AccountNotFoundException;
 import com.swag.crypto.wallet.portfolio.model.bean.Crypto;
 import com.swag.crypto.wallet.portfolio.model.dto.WalletDTO;
 import com.swag.crypto.wallet.portfolio.model.bean.InitWallet;
@@ -14,11 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Optional;
 
+import static com.swag.crypto.wallet.core.constants.Constant.ErrorMessage.IMPORT_PHASE;
 import static com.swag.crypto.wallet.core.constants.Constant.Path.WALLET;
+import static com.swag.crypto.wallet.user.Utils.UserUtils.extractMnemonichPhrase;
 import static com.swag.crypto.wallet.user.Utils.UserUtils.mapToUserDto;
 
 
@@ -40,8 +46,7 @@ public class WalletController {
         User user = userService.findById(Long.valueOf(userId));
         WalletDTO wallet = walletService.create(Arrays.asList(initWallet.getMnemonicSeedPhrase().split(" ")), mapToUserDto(user));
         Crypto currency = ExternalConnector.btcRTdata();
-        wallet.setCrypto(currency)
-        ;
+        wallet.setCrypto(currency);
         model.addAttribute("wallet", wallet);
         if (result.hasErrors()) {
             result.rejectValue("Error", "00");
@@ -52,16 +57,19 @@ public class WalletController {
     @PostMapping("/import/{userId}")
     public String importWallet(@Valid @ModelAttribute("wallet") InitWallet initWallet, @PathVariable String userId, BindingResult result,
                                Model model) {
+
         User user = userService.findById(Long.valueOf(userId));
         Crypto crypto = ExternalConnector.btcRTdata();
-        WalletDTO wallet = walletService.importWallet(Arrays.asList(initWallet.getMnemonicSeedPhrase().split(" ")), mapToUserDto(user));
-        wallet.setCrypto(crypto);
 
+
+        WalletDTO walletDTO = walletService.importWallet(extractMnemonichPhrase(initWallet.getMnemonicSeedPhrase()), mapToUserDto(user));
+
+        walletDTO.setCrypto(crypto);
         if (result.hasErrors()) {
             result.rejectValue("Error", "00");
+            return "portfolio";
         }
-
-        model.addAttribute("wallet", wallet);
+        model.addAttribute("wallet", walletDTO);
         return "portfolio";
     }
 

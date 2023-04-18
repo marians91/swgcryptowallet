@@ -7,6 +7,9 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import static com.swag.crypto.wallet.core.constants.Constant.*;
+import static com.swag.crypto.wallet.core.constants.Constant.ErrorMessage.IMPORT_PHASE;
+import static com.swag.crypto.wallet.core.constants.Constant.ErrorMessage.TRANSFER_FUNDS_PHASE;
+
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -30,9 +33,14 @@ public class GlobalExceptionHandler implements ErrorController {
     public ModelAndView handleAccountNotFoundException(AccountNotFoundException ex) {
         ex.printStackTrace();
         ModelAndView model = new ModelAndView();
-
-        model.addObject("account", ex.getMessage());
-        model.setViewName("accountNotFound");
+        if(ex.getCode().equals(IMPORT_PHASE)){
+            model.addObject("userId", ex.getUserId());
+            model.setViewName("importAccountNotFound");
+        }
+        if(ex.getCode().equals(TRANSFER_FUNDS_PHASE)){
+            model.addObject("account", ex.getAccount());
+            model.setViewName("accountNotFound");
+        }
         return model;
     }
 
